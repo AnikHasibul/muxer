@@ -73,5 +73,5 @@ func (c *CTX) BuffFlush(w io.Writer) {
 	fmt.Fprintln(w, c.buff)
 }
 func (c *CTX) BuffFlushByte(w io.Writer) {
-	w.Write(c.buff)
+	w.Write([]byte(c.buff))
 }
