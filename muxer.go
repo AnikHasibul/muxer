@@ -8,6 +8,8 @@ import (
 	"net/http"
 	"sync"
 	"time"
+
+	"github.com/gorilla/sessions"
 )
 
 type route struct {
@@ -15,6 +17,8 @@ type route struct {
 	mu sync.Mutex
 }
 type CTX struct {
+	Ref     string
+	Sess    *sessions.Session
 	ReqID   string
 	buff    string
 	StartAt time.Time
@@ -26,15 +30,22 @@ type Handler func(*CTX)
 var routes = route{
 	r: make(map[string]Handler),
 }
+var (
+	Boot  = func(*CTX) {}
+	Defer = func(*CTX) {}
+)
 
 func Root(w http.ResponseWriter, r *http.Request) {
 	if f, ok := routes.r[r.URL.Path]; ok {
 		c := &CTX{
+			Ref:     r.URL.Path,
 			ReqID:   Key(),
 			StartAt: time.Now(),
 			W:       w,
 			R:       r,
 		}
+		Boot(c)
+		defer Defer(c)
 		f(c)
 	}
 }
