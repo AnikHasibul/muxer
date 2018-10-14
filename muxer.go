@@ -21,6 +21,7 @@ type CTX struct {
 	Sess    *sessions.Session
 	ReqID   string
 	buff    string
+	Err     error
 	StartAt time.Time
 	W       http.ResponseWriter
 	R       *http.Request
