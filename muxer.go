@@ -19,6 +19,7 @@ type route struct {
 type CTX struct {
 	Ref     string
 	Sess    *sessions.Session
+	CSRF    *sessions.Session
 	ReqID   string
 	buff    string
 	Err     error
@@ -46,6 +47,9 @@ func Root(w http.ResponseWriter, r *http.Request) {
 			R:       r,
 		}
 		Boot(c)
+		if c.Err != nil {
+			return
+		}
 		defer Defer(c)
 		f(c)
 	}
