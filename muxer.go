@@ -86,8 +86,7 @@ func (c *CTX) BuffGet() string {
 	return c.buff
 }
 func (c *CTX) BuffFlush(w io.Writer) {
-	fmt.Fprintln(w, c.buff)
-}
-func (c *CTX) BuffFlushByte(w io.Writer) {
-	w.Write([]byte(c.buff))
+	if c.buff != "" {
+		fmt.Fprintln(w, c.buff)
+	}
 }
